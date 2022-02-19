@@ -1,0 +1,48 @@
+﻿@model bookMaintainingSystem.Models.LendRecord
+
+@{
+    ViewBag.Title = "LendRecord";
+}
+
+<h2>書籍借閱紀錄</h2>
+
+@*//@using (Html.BeginForm())//不用接收資料就不用這行*@
+
+    <div class="form-horizontal">
+        @if (ViewBag.Record != null)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr >
+                        <th>借閱日期</th>
+                        <th>借閱人員編號</th>
+                        <th>英文姓名</th>
+                        <th>中文姓名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in (List<bookMaintainingSystem.Models.LendRecord>)ViewBag.Record)
+                    {
+                        <tr id='@item.BookID'>
+                            <td>
+                                @if (item.LendDate != null)
+                                {
+                                    @item.LendDate.ToString("yyyy/MM/dd")
+                                }
+                            </td>
+                            <td>@item.KeeperId</td>
+                            <td>@item.UserEname</td>
+                            <td>@item.UserCname</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <h5>無借閱紀錄</h5>
+            </div>
+        }
+    </div>
+

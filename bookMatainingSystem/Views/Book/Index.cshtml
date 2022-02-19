@@ -1,0 +1,123 @@
+﻿﻿@model bookMaintainingSystem.Models.BookSearchArg
+
+@{ ViewBag.Title = "Index"; }
+
+<h2>圖書維護</h2>
+
+@using (Html.BeginForm("Index", "Book", FormMethod.Post, new { id = "Form1" }))
+{
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.BookName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.BookName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BookCategory, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.BookCategory, (List<SelectListItem>)ViewBag.BookCategoryData, "請選擇", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BookKeeper, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.BookKeeper, (List<SelectListItem>)ViewBag.BookKeeperData, "請選擇", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BookStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.BookStatus, (List<SelectListItem>)ViewBag.BookStatusData, "請選擇", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-10">
+            <input type="submit" value="查詢" />
+            @Html.ActionLink("新增", "Insert")
+            @Html.ActionLink("清除", "Index")
+        </div>
+    </div>
+
+
+    @if (ViewBag.SearchResult != null)
+    {
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr id>
+            <th>圖書類別</th>
+            <th>書名</th>
+            <th>購書日期</th>
+            <th>借閱狀態</th>
+            <th>借閱人</th>
+
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in (List<bookMaintainingSystem.Models.Book>)ViewBag.SearchResult)
+        {
+<tr id='@item.BookID'>
+    <td>@item.BookCategory</td>
+    <td>@Html.ActionLink(item.BookName, "Detail", new { id = item.BookID, @value = @item.BookID })</td>
+    <td>
+        @if (item.BookBoughtDate != null)
+        {
+@item.BookBoughtDate.ToString("yyyy/MM/dd")}
+    </td>
+    <td>@item.BookStatus</td>
+
+    <td>@item.BookKeeper </td>
+
+    <td>
+        @Html.ActionLink("借閱紀錄", "LendRecord", new { id = item.BookID, @value = @item.BookID })
+    </td>
+
+    <td>
+        @Html.ActionLink("編輯", "Edit", new { id = item.BookID, @value = @item.BookID })
+
+    </td>
+    <td>
+        <a class="deleteBook" href="#">刪除</a>
+        <input class="hidBookId" type="hidden" value='@item.BookID' />
+        <input class="hidBookStatus" type="hidden" value='@item.BookStatus' />
+    </td>
+</tr>}
+    </tbody>
+</table>}
+</div>}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".deleteBook").click(function (e) {
+            e.preventDefault();
+            var tr = $(this).closest('tr');
+            var id = $(this).next().val();
+            var status = $(this).next().next().val();
+            if (status == "已借出") {
+                alert("書本已借出，不可刪除資料");
+            }
+            else {
+                if (confirm("是否要刪除此筆資料?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Book/Delete/",
+                        data: "id=" + $(this).next().val(),
+                        dataType: "json",
+                        success: function (response) {
+                            $(tr).remove();
+                            alert("刪除成功");
+                        }, error: function (error) {
+                            alert("系統發生錯誤");
+                        }
+                    });
+                }
+                return false;
+            }
+        });
+    });
+</script>
+

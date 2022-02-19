@@ -1,0 +1,58 @@
+﻿@model bookMaintainingSystem.Models.BookEditArg
+
+@{
+    ViewBag.Title = "Detail";
+}
+
+<h2>明細</h2>
+
+@using (Html.BeginForm("Detail", "Book", FormMethod.Post, new { id = "Form1" }))
+{
+    <div>
+
+        <dl class="dl-horizontal">
+            <dd>
+                @Html.LabelFor(model => model.BookName, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DisplayFor(model => model.BookName)
+            </dd>
+            <dd>
+                @Html.LabelFor(model => model.BookAuthor, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DisplayFor(model => model.BookAuthor)
+            </dd>
+            <dd>
+                @Html.LabelFor(model => model.BookPublisher, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DisplayFor(model => model.BookPublisher)
+            </dd>
+            <dd>
+                @Html.LabelFor(model => model.BookContent, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DisplayFor(model => model.BookContent)
+            </dd>
+            <dd>
+                @Html.LabelFor(model => model.BookBoughtDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DisplayFor(model => model.BookBoughtDate)
+            </dd>
+            <dd>
+                @Html.LabelFor(model => model.BookCategory, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DisplayFor(model => model.BookCategory)
+            </dd>
+            <dd>
+                @Html.LabelFor(model => model.BookStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DisplayFor(model => model.BookStatus)
+            </dd>
+
+            <dd>
+                @Html.LabelFor(model => model.BookKeeper, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DisplayFor(model => model.BookKeeper)
+            </dd>
+
+
+        </dl>
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+
+    </div>}
+
